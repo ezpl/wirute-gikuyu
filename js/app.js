@@ -155,6 +155,11 @@
 
   document.getElementById("dir-toggle").addEventListener("change", () => { if (curCard) nextCard(); });
 
+  /* Tastaturstøtte for flashkortet (Enter/mellomrom snur). */
+  document.getElementById("flashcard").addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flipCard(); }
+  });
+
   /* ====== QUIZ ====== */
   let quizMode = "ky2en", qPool = [], qList = [], qi = 0, qScore = 0, qAnswered = false;
 
