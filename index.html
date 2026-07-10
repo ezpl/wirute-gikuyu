@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wĩrute Gĩkũyũ</title>
+<meta name="description" content="Wĩrute Gĩkũyũ — learn the Kikuyu language: flashcards, quizzes, grammar, sentences and a searchable dictionary.">
+<link rel="stylesheet" href="css/app.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%232f7d5b'/%3E%3Ctext x='24' y='31' font-family='sans-serif' font-size='20' font-weight='700' fill='%23fff' text-anchor='middle'%3EG%C4%A9%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <div class="logo">Gĩ</div>
+    <div>
+      <h1>Wĩrute Gĩkũyũ</h1>
+      <p class="sub" data-i18n="ui.sub"></p>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-v="home" data-i18n="ui.tab.home"></button>
+    <button class="tab" data-v="cards" data-i18n="ui.tab.cards"></button>
+    <button class="tab" data-v="quiz" data-i18n="ui.tab.quiz"></button>
+    <button class="tab" data-v="grammar" data-i18n="ui.tab.grammar"></button>
+    <button class="tab" data-v="sentences" data-i18n="ui.tab.sentences"></button>
+    <button class="tab" data-v="dict" data-i18n="ui.tab.dict"></button>
+  </nav>
+  <div class="lang-box">
+    <label class="sr-only" for="lang-select" data-i18n="ui.langLabel"></label>
+    <select id="lang-select" aria-label="Language">
+      <option value="no">Norsk</option>
+      <option value="en">English</option>
+      <option value="de">Deutsch</option>
+      <option value="fr">Français</option>
+    </select>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- HOME -->
+  <section class="view active" id="home">
+    <div class="card" style="background:linear-gradient(135deg,var(--brand-l),#fff)">
+      <span class="pill">Wĩ mwega? 👋</span>
+      <h2 class="sec" style="margin-top:12px" data-i18n="ui.home.welcome"></h2>
+      <p style="margin:6px 0 0;max-width:640px" data-i18n="ui.home.intro"></p>
+    </div>
+    <div class="grid g3">
+      <div class="stat"><div class="n" id="s-due">0</div><div class="l" data-i18n="ui.home.due"></div></div>
+      <div class="stat"><div class="n" id="s-learned">0</div><div class="l" data-i18n="ui.home.started"></div></div>
+      <div class="stat"><div class="n" id="s-mastered">0</div><div class="l" data-i18n="ui.home.mastered"></div></div>
+      <div class="stat"><div class="n" id="s-total">0</div><div class="l" data-i18n="ui.home.total"></div></div>
+    </div>
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <div><strong data-i18n="ui.home.today"></strong><div class="gloss" style="font-size:13px" data-i18n="ui.home.todaySub"></div></div>
+        <button class="btn primary" onclick="go('cards')" data-i18n="ui.home.startReview"></button>
+      </div>
+      <div class="progressbar"><i id="home-prog" style="width:0%"></i></div>
+      <div class="gloss" style="font-size:12px" id="home-prog-l">0&nbsp;%</div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><span class="pill acc" data-i18n="ui.home.wordOfDay"></span>
+        <p style="margin:12px 0 2px;font-size:22px" class="ky" id="wod-ky"></p>
+        <p class="gloss" style="margin:0" id="wod-en"></p>
+        <button class="btn ghost" style="margin-top:12px" onclick="rollWord()" data-i18n="ui.home.newWord"></button>
+      </div>
+      <div class="card"><span class="pill" data-i18n="ui.home.howTo"></span>
+        <ul style="margin:12px 0 0;padding-left:18px;font-size:14px;color:var(--muted)">
+          <li data-i18n-html="ui.home.how1"></li>
+          <li data-i18n-html="ui.home.how2"></li>
+          <li data-i18n-html="ui.home.how3"></li>
+          <li data-i18n-html="ui.home.how4"></li>
+          <li data-i18n-html="ui.home.how5"></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CARDS -->
+  <section class="view" id="cards">
+    <h2 class="sec" data-i18n="ui.cards.title"></h2>
+    <p class="lede" data-i18n="ui.cards.lede"></p>
+    <div class="select" id="deck-select"></div>
+    <div class="row" style="margin:6px 4px">
+      <label style="font-size:13px;color:var(--muted)"><input type="checkbox" id="dir-toggle"> <span data-i18n="ui.cards.dirToggle"></span></label>
+    </div>
+    <div id="fc-area">
+      <div class="fc" id="flashcard" onclick="flipCard()">
+        <div class="fc-inner">
+          <div class="fc-face fc-front"><span class="box-tag" id="fc-box"></span>
+            <div class="big" id="fc-front-t"></div><div class="small" id="fc-front-s"></div>
+            <div class="fc-hint" data-i18n="ui.cards.flipHint"></div></div>
+          <div class="fc-face fc-back"><span class="box-tag" id="fc-box2"></span>
+            <div class="big" id="fc-back-t"></div><div class="small" id="fc-back-s"></div></div>
+        </div>
+      </div>
+      <div class="grade">
+        <button class="btn ghost" onclick="gradeCard(0)" data-i18n="ui.cards.hard"></button>
+        <button class="btn primary" onclick="gradeCard(1)" data-i18n="ui.cards.good"></button>
+      </div>
+      <div class="progressbar"><i id="deck-prog" style="width:0%"></i></div>
+      <div class="gloss" style="font-size:12px;text-align:center" id="deck-status"></div>
+    </div>
+    <div class="card" id="fc-done" style="display:none;text-align:center">
+      <div style="font-size:40px">🎉</div>
+      <h2 class="sec" style="margin-top:6px" data-i18n="ui.cards.doneTitle"></h2>
+      <p class="gloss" data-i18n="ui.cards.doneSub"></p>
+      <button class="btn primary" onclick="startDeck()" data-i18n="ui.cards.repeatAll"></button>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="view" id="quiz">
+    <h2 class="sec" data-i18n="ui.quiz.title"></h2>
+    <p class="lede" data-i18n="ui.quiz.lede"></p>
+    <div id="quiz-illu"></div>
+    <div class="select" id="quiz-mode">
+      <button class="chip on" data-m="ky2en">Gĩkũyũ → <span data-i18n="ui.quiz.english"></span></button>
+      <button class="chip" data-m="en2ky"><span data-i18n="ui.quiz.english"></span> → Gĩkũyũ</button>
+      <button class="chip" data-m="type" data-i18n="ui.quiz.typeMode"></button>
+    </div>
+    <div class="card" id="quiz-card">
+      <div class="row" style="justify-content:space-between">
+        <span class="pill" id="q-count"></span>
+        <span class="gloss" style="font-size:13px"><span data-i18n="ui.quiz.score"></span> <strong id="q-score">0</strong></span>
+      </div>
+      <div class="progressbar"><i id="q-prog" style="width:0%"></i></div>
+      <h2 class="sec" id="q-prompt" style="margin:14px 4px"></h2>
+      <div id="q-body"></div>
+      <div class="feedback" id="q-feedback"></div>
+      <div class="row" style="margin-top:14px;justify-content:flex-end">
+        <button class="btn primary" id="q-next" onclick="nextQ()" style="display:none" data-i18n="ui.quiz.next"></button>
+      </div>
+    </div>
+    <div class="card" id="quiz-result" style="display:none;text-align:center">
+      <div style="font-size:40px" id="qr-emoji">🏆</div>
+      <h2 class="sec" id="qr-title"></h2>
+      <p class="gloss" id="qr-sub"></p>
+      <button class="btn primary" onclick="startQuiz()" data-i18n="ui.quiz.newQuiz"></button>
+    </div>
+  </section>
+
+  <!-- GRAMMAR -->
+  <section class="view" id="grammar">
+    <h2 class="sec" data-i18n="ui.grammar.title"></h2>
+    <p class="lede" data-i18n="ui.grammar.lede"></p>
+    <div id="grammar-body"></div>
+  </section>
+
+  <!-- SENTENCES -->
+  <section class="view" id="sentences">
+    <h2 class="sec" data-i18n="ui.sentences.title"></h2>
+    <p class="lede" data-i18n="ui.sentences.lede"></p>
+    <div id="sent-body"></div>
+    <div class="note" data-i18n="ui.sentences.note"></div>
+  </section>
+
+  <!-- DICT -->
+  <section class="view" id="dict">
+    <h2 class="sec" data-i18n="ui.dict.title"></h2>
+    <p class="lede"><span data-i18n="ui.dict.lede"></span> <span id="dict-count"></span></p>
+    <input class="txt" id="dict-search" data-i18n-ph="ui.dict.searchPh" style="margin:8px 0 4px">
+    <div class="gloss" style="font-size:12px;margin:4px" id="dict-status"></div>
+    <div id="dict-body"></div>
+  </section>
+
+  <div class="foot">
+    <strong>Wĩrute Gĩkũyũ</strong><br>
+    <span data-i18n="ui.foot.sources"></span> Gĩkũyũ–English Dictionary (Wambũi&nbsp;M, 2022) ·
+    A Basic Sketch Grammar of Gĩkũyũ (Englebretson et&nbsp;al., Rice University) ·
+    A Short Kikuyu Grammar (Gecaga &amp; Kirkaldy-Willis, 1953).<br>
+    <span data-i18n="ui.foot.progress"></span> · <a href="#" id="reset-link" data-i18n="ui.foot.reset"></a>
+  </div>
+</div>
+
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
